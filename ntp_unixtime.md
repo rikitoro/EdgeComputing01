@@ -76,7 +76,7 @@ int tm_sec;  // 秒 [0-59]
 
 ---
 
-## スケッチ例1 : 現在時刻の UNIX time をLCDに表示する
+## スケッチ例 1 : 現在時刻の UNIX time をLCDに表示する
 
 `configTime` と `getLocalTime` を使って、現時刻を取得し、UNIX time (協定世界時 (UTC) での1970年1月1日午前0時0分0秒から経過秒数) としてLCDに表示するプログラムを示します。
 
@@ -84,7 +84,7 @@ int tm_sec;  // 秒 [0-59]
 
 プログラム中の `<your WiFi SSID>` と `<your WiFi password>` はそれぞれ WiFi の SSDI とパスワードに置き換えてください。
 
-<img src="./figs/unixtime.jpg" alt="UNIX time の表示" width="300">
+<img src="./fig/unixtime.jpg" alt="UNIX time の表示" width="300">
 <!--
 // ![UNIX time の表示](./figs/unixtime.jpg "UNIX time の表示")
 -->

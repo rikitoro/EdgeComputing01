@@ -28,11 +28,11 @@ SQLite は、Node-RED へもインストールして使用することが可能�
 
 3. 検索欄に node-red-node-sqlite と入力すると、一覧に「node-red-node-sqlite」が表示されますので、これを選択してインストールします。
  
- <img src="./figs/install_sqlite_node.png" alt="sqlite のインストール">
+ <img src="./fig/install_sqlite_node.png" alt="sqlite のインストール">
 
 4. インストールに成功するとパレットに sqlite ノードが追加されます。 
   
-<img src="./figs/sqlite_node.png" alt="sqlite ノード">
+<img src="./fig/sqlite_node.png" alt="sqlite ノード">
 
 ---
 

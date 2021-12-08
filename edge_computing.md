@@ -6,7 +6,7 @@
 
 ## システムの全体構成
 
-<img src="./figs/system.png" alt="システムの全体構成">
+<img src="./fig/system.png" alt="システムの全体構成">
 
 ---
 
