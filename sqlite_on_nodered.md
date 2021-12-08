@@ -42,7 +42,7 @@ Node-RED にデータベースを作成し、HTTP GETメソッドによってデ
 
 sqlite, template, http in, http response, inject, debug ノードを使って図のようにノードを配置して組み合わせてください。
 
-<img src="./figs/database.png" alt="データベースシステムの構築">
+<img src="./fig/database.png" alt="データベースシステムの構築">
 
 以下、sqlite, template, http in ノードの設定を行っていきます。
 inject, debug, http response ノードについてはデフォルトの設定のままで大丈夫です。
@@ -59,13 +59,13 @@ sqlite ノード「1. データベース」を設定します。
 データベース欄にデータベースを格納するファイルの場所とファイル名を入力します(例 testdb)。
 モードは「読み取り-書き込み-作成」を選択します。追加ボタンをクリックします。
 
-<img src="./figs/add_sqlitedb.png" alt="sqlitedb の追加">
+<img src="./fig/add_sqlitedb.png" alt="sqlitedb の追加">
 
 3. 「sqliteノードを編集」ペインに戻ります。データベース欄に先ほど追加したデータベースを選択します。
 SQLクエリ欄は「msg.topic経由」を選択します。
 完了をクリックして設定を終了します。
 
-<img src="./figs/edit_sqlite_node.png" alt="sqlite node の編集">
+<img src="./fig/edit_sqlite_node.png" alt="sqlite node の編集">
 
 --
 
@@ -75,7 +75,7 @@ SQLクエリ欄は「msg.topic経由」を選択します。
 
 「2. テーブル作成」は以下のように設定してください。
 
-<img src="./figs/create_table.png" alt="create 文によるテーブルの作成">
+<img src="./fig/create_table.png" alt="create 文によるテーブルの作成">
 
 プロパティ、形式、構文、出力形式は以下のように設定します。これらは他の template ノードでも同じにように設定します。
 
@@ -85,17 +85,23 @@ SQLクエリ欄は「msg.topic経由」を選択します。
 |構文| Mustache |
 |形式| Mustacheテンプレート |
 |出力形式| 平文 |
-
+ 
 テンプレート欄には SQL クエリを記述します。
 
-ここでは create 文で新たなテーブル env_table を作成しています。
-
-ここではIoTデバイスから送られる気温と測定時刻のUNIX timeを受信してそのデータを記録することを想定し、env_table の各カラムの定義は以下の通りとしました。
+ここでは create 文で新たなテーブル env_table を作成しています。IoTデバイスから送られる気温と測定時刻のUNIX timeを受信してそのデータを記録することを想定し、env_table の各カラムの定義は以下の通りとしました。
 
 |カラム名|データ型| 備考 |
 |---|---|---|
 | timestamp | int | UNIX time |
 | temperature | real | 気温 |
+
+[テンプレート]
+````SQL
+create table env_table(
+  timestamp int,
+  temperature real
+);
+````
 
 --
 
@@ -103,11 +109,19 @@ SQLクエリ欄は「msg.topic経由」を選択します。
 
 「3. データ挿入」は以下のように設定してください。
 
-<img src="./figs/insert_data.png" alt="insert 文によるデータ挿入">
+<img src="./fig/insert_data.png" alt="insert 文によるデータ挿入">
 
-ここでは insert 文により、env_table へデータを挿入しています。
+テンプレート欄には insert 文により、env_table へデータを挿入するSQLクエリを記述しています。
+このノードに接続されている http in ノード「6.[get]/env」より渡される payload から timestamp フィールドとtemperature フィールドのデータを取り出してクエリへ挿入しています。このとき、Mustache 構文 `{{{payload.timestamp}}}`、`{{{payload.temperature}}}` を使っています。
 
-このノードに接続されている http in ノード「6.[get]/env」より渡される payload から timestamp フィールドとtemperature フィールドのデータを取り出して insert 文へ挿入しています。このとき、Mustache 構文 `{{{payload.timestamp}}}`、`{{{payload.temperature}}}` を使っています。
+[テンプレート]
+````SQL
+insert into env_table (timestamp, temperature)
+  values (
+    {{{payload.timestamp}}},
+    {{{payload.temperature}}}
+  );
+````
 
 --
 
@@ -115,10 +129,15 @@ SQLクエリ欄は「msg.topic経由」を選択します。
 
 「4. テーブルの内容の表示」は以下のように設定してください。
 
-<img src="./figs/select_data.png" alt="select 文によるデータ一覧の取得">
+<img src="./fig/select_data.png" alt="select 文によるデータ一覧の取得">
 
 テンプレート欄には、
 select 文により env_table に保持されているすべてのデータを取得する SQL クエリを記述しています。
+
+[テンプレート]
+````SQL
+select * from env_table;
+````
 
 ---
 
@@ -126,10 +145,15 @@ select 文により env_table に保持されているすべてのデータを�
 
 「5. テーブル削除」は以下のように設定してください。
 
-<img src="./figs/drop_table.png" alt="drop 文によるテーブルの削除" width="300">
+<img src="./fig/drop_table.png" alt="drop 文によるテーブルの削除" >
 
 テンプレート欄には、
 drop 文により env_table を削除する SQLクエリを記述しています。
+
+[テンプレート]
+````SQL
+drop table env_table;
+````
 
 --
 
@@ -142,14 +166,14 @@ http in ノード「6. [get]/env」は次のように設定します。
 | メソッド | GET |
 | URL | /env |
 
-<img src="./figs/http_in_node.png" alt="http in ノードの設定">
+<img src="./fig/http_in_node.png" alt="http in ノードの設定">
 
 これにより、 GET リクエストを受け付けるエンドポイントとして
 `<Node-RED サーバのURL>/env` が設定されます。
 例えば、Node-RED サーバの URL が `http://your_node_red_server:1880/` の場合、
 `http://http://your_node_red_server:1880/env` がエンドポイントとなります。
 
-また、http inノードは GET リクエストで受け取った URL パラメータを Json 形式にして payload として接続されているtemplate ノード「3. データ挿入」へ渡します。
+また、http inノードは GET リクエストで受け取った URL パラメータを Json 形式に変換し payload として、次段に接続されているtemplate ノード「3. データ挿入」へ渡します。
 
 
 ---
@@ -194,7 +218,7 @@ sqlite ノード「1. データベース」に接続されている debug ノー
 
 HTTP GET リクエストによって送ったデータ(timestamp, temperature) が確かにデータベースに登録されていることが確認できます。
 
-<img src="./figs/db_test.png" alt="データベースにデータが登録されていることの確認">
+<img src="./fig/db_test.png" alt="データベースにデータが登録されていることの確認">
 
 --
 
