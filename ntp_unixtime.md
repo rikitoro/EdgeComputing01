@@ -209,8 +209,8 @@ void connectWiFi();
 unsigned long getUnixtime();
 
 // WiFi SSID, password
-const char *ssid = "Buffalo-A-86FC";
-const char *password = "";
+const char *ssid = "<your wifi ssid>";
+const char *password = "<your wifi password>";
 
 // NTP Server
 const char *ntpServer = "ntp.nict.jp";
