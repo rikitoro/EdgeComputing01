@@ -1,9 +1,8 @@
-# node-red にデータベースを構築する
+# Node-RED に SQLite データベースを構築する
 
 IoTデバイスから送られる各種のセンサー情報を有効に活用するためには、そのデータを蓄積するためのデータベースが必要となります。
 
-
-ここでは、node-red 上にリレーショナルデータベースを構築し、SQLクエリによりデータを追加したり、データの一覧を表示したりする方法を説明します。
+ここでは Node-RED 上に SQLite インストールして、リレーショナルデータベースを構築し、SQLクエリによりデータを追加したり、データの一覧を表示したりする方法を説明します。
 
 ---
 
@@ -47,7 +46,7 @@ sqlite, template, http in, http response, inject, debug ノードを使って図
 以下、sqlite, template, http in ノードの設定を行っていきます。
 inject, debug, http response ノードについてはデフォルトの設定のままで大丈夫です。
 
---
+---
 
 ### sqlite ノード の設定
 
@@ -67,7 +66,7 @@ SQLクエリ欄は「msg.topic経由」を選択します。
 
 <img src="./fig/edit_sqlite_node.png" alt="sqlite node の編集">
 
---
+---
 
 ### template ノードの設定
 
@@ -103,7 +102,7 @@ create table env_table(
 );
 ````
 
---
+---
 
 #### template ノード「3. データ挿入」の設定
 
@@ -123,7 +122,7 @@ insert into env_table (timestamp, temperature)
   );
 ````
 
---
+---
 
 #### template ノード「4. テーブルの内容の表示」の設定
 
@@ -155,7 +154,7 @@ drop 文により env_table を削除する SQLクエリを記述しています
 drop table env_table;
 ````
 
---
+---
 
 ### http in ノードの設定
 
@@ -192,7 +191,7 @@ template ノード 「2. テーブルの作成」に接続している inject �
 
 テーブルの作成は一度だけ行います。
 
---
+---
 
 #### HTTP GET リクエストの送信
 
@@ -206,8 +205,7 @@ WebブラウザやIoTデバイスから、http in ノード「4. [get]/env」で
 
  timestamp や temperature の設定値を変えて何度かアクセスしてみましょう。
 
-
---
+---
 
 #### テーブルの内容の確認
 
@@ -220,7 +218,7 @@ HTTP GET リクエストによって送ったデータ(timestamp, temperature) �
 
 <img src="./fig/db_test.png" alt="データベースにデータが登録されていることの確認">
 
---
+---
 
 #### テーブルの削除
 

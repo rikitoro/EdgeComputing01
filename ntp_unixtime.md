@@ -13,11 +13,11 @@ M5Stack には NTP プロトコルによって現在時刻を取得するライ�
 
 `configTime` 関数で接続するNTPサーバなどの設定を行った後、`getLocalTime` 関数によって現在時刻を取得できます。
 
---
+---
 
 ###  NTPサーバとローカルタイムゾーンの設定 : `configTime`
 
-書式 :
+[書式]
 
   `void configTime(long gmtOffset_sec, int daylightOffset_sec, const char* server);`
 
@@ -29,11 +29,12 @@ M5Stack には NTP プロトコルによって現在時刻を取得するライ�
 
 NTPサーバのURLには、"ntp.nict.jp", "time.google.com" などを設定するとよいでしょう。
 
-使用例:
+[使用例]
 
   `configTime(0, 0, "ntp.nict.jp");`
 
---
+---
+
 ### 現在時刻を取得 : `getLocalTime`
 
 書式 :
@@ -58,7 +59,7 @@ struct tm timeinfo;
 getLocalTime(&timeinfo); 
 ````
 
---
+---
 
 ### 時刻情報を保持する構造体型 struct tm について
 
@@ -80,16 +81,13 @@ int tm_sec;  // 秒 [0-59]
 
 `configTime` と `getLocalTime` を使って、現時刻を取得し、UNIX time (協定世界時 (UTC) での1970年1月1日午前0時0分0秒から経過秒数) としてLCDに表示するプログラムを示します。
 
-インターネットに接続するため WiFi が必要となります。
+インターネットに接続するため Wi-Fi アクセスポイントが必要となります。
 
-プログラム中の `<your WiFi SSID>` と `<your WiFi password>` はそれぞれ WiFi の SSDI とパスワードに置き換えてください。
+プログラム中の `<your WiFi SSID>` と `<your WiFi password>` はそれぞれ実習で用いる Wi-Fi アクセスポイントの SSDI とパスワードに置き換えてください。
 
-<img src="./fig/unixtime.jpg" alt="UNIX time の表示" width="300">
-<!--
-// ![UNIX time の表示](./figs/unixtime.jpg "UNIX time の表示")
--->
+<img src="./fig/unixtime.jpg" alt="UNIX time の表示">
 
---
+---
 
 ### プログラム
 
@@ -159,7 +157,7 @@ void connectWiFi() {
 
 ````
 
---
+---
 
 ### 説明
 
@@ -198,4 +196,80 @@ time(&now); // (3) UNIX timeの取得
 
 なお`time`関数は、`getLocalTime` で現在時刻を取得していない状態で呼び出した場合は、プログラムが起動してからの経過時間(秒)が得られます。
 
+---
 
+## スケッチ例 2. 現在の日時をLCDに表示する
+
+
+````C
+#include <M5Stack.h>
+#include <WiFi.h>
+
+void connectWiFi();
+unsigned long getUnixtime();
+
+// WiFi SSID, password
+const char *ssid = "Buffalo-A-86FC";
+const char *password = "";
+
+// NTP Server
+const char *ntpServer = "ntp.nict.jp";
+
+void setup() {
+  M5.begin(true, false, true, false);
+  M5.Speaker.mute();
+  M5.Lcd.fillScreen(TFT_BLACK);
+  M5.Lcd.setTextSize(3);
+  // Wifi connection
+  connectWiFi();
+
+  // 接続するNTPサーバ等の設定
+  configTime( 9 * 60 * 60 /* JST */, 0, ntpServer); // (1) configTimeの呼び出し
+}
+
+void loop() {
+
+  M5.Lcd.setCursor(0, 100);
+  M5.Lcd.println("Unixtime:");
+
+  M5.Lcd.println(getDateTime());
+
+  delay(1000);
+}
+
+/////
+
+// 現在時刻を取得し YYYY-MM-DD hh:mm:ss の形式の文字列として返す 
+String getDateTime() {
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo)) { // (2) getLocalTimeの呼び出し
+    Serial.println("Failed to obtain time");
+    return String("Failed to obtain time");
+  }
+
+  int year    = timeinfo.tm_year + 1900;
+  int month   = timeinfo.tm_mon + 1;
+  int day     = timeinfo.tm_mday;
+  int hour    = timeinfo.tm_hour;
+  int minute  = timeinfo.tm_min;
+  int second  = timeinfo.tm_second;
+  char buf[60];
+  sprintf(buf, "%4d-%02d-%02d %02d:%02d:%02d", 
+                year, month, day, hour, minute, second);
+  return String(buf);
+  
+}
+
+//////
+
+void connectWiFi() {
+  Serial.println("connecting WiFi");
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }  
+  Serial.println("connected!");
+}
+````
