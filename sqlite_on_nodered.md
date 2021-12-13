@@ -153,6 +153,7 @@ select * from env_table;
 drop 文により env_table を削除する SQLクエリを記述しています。
 
 [テンプレート]
+
 ````SQL
 drop table env_table;
 ````
@@ -186,47 +187,20 @@ http in ノード「6. [get]/env」は次のように設定します。
 
 --
 
-#### テーブルの作成
+1. テーブルの作成 : template ノード 「2. テーブルの作成」に接続している inject ノードのボタンをクリックします。新たなテーブル env_table が作成されます。テーブルの作成は一度だけ行います。
 
-template ノード 「2. テーブルの作成」に接続している inject ノードのボタンをクリックします。
+2. HTTP GET リクエストの送信 : WebブラウザやIoTデバイスから、http in ノード「4. [get]/env」で設定したエンドポイントへ送信データに応じたURLパラメータを付与してGETリクエストを送信します。
 
-新たなテーブル env_table が作成されます。
+  例 :
 
-テーブルの作成は一度だけ行います。
+  あなたが使用しているNode-RED サーバの URL が `http://your_nodered_server.kosen-ac.jp:1880` の場合、Webブラウザなどで以下のURLにアクセスします。
 
----
+  `http://your_nodered_server.kosen-ac.jp:1880/env?timestamp=1638319902&temperature=15.3`
 
-#### HTTP GET リクエストの送信
+  timestamp や temperature の設定値を変えて何度かアクセスしてみましょう。
 
-WebブラウザやIoTデバイスから、http in ノード「4. [get]/env」で設定したエンドポイントへ送信データに応じたURLパラメータを付与してGETリクエストを送信します。
+3. テーブルの内容の確認 : template ノード「5. テーブルの内容の表示」に接続している inject ノードのボタンをクリックします。sqlite ノード「1. データベース」に接続されている debug ノードのデバッグメッセージを確認します。HTTP GET リクエストによって送ったデータ(timestamp, temperature) が確かにデータベースに登録されていることが確認できます。
 
-例 :
+  <img src="./fig/db_test.png" alt="データベースにデータが登録されていることの確認">
 
-あなたが使用しているNode-RED サーバの URL が `http://your_nodered_server.kosen-ac.jp:1880` の場合、Webブラウザなどで以下のURLにアクセスします。
-
-`http://your_nodered_server.kosen-ac.jp:1880/env?timestamp=1638319902&temperature=15.3`
-
- timestamp や temperature の設定値を変えて何度かアクセスしてみましょう。
-
----
-
-#### テーブルの内容の確認
-
-template ノード「5. テーブルの内容の表示」に接続している inject ノードのボタンをクリックします。
-
-sqlite ノード「1. データベース」に接続されている debug ノードの
-デバッグメッセージを確認します。
-
-HTTP GET リクエストによって送ったデータ(timestamp, temperature) が確かにデータベースに登録されていることが確認できます。
-
-<img src="./fig/db_test.png" alt="データベースにデータが登録されていることの確認">
-
----
-
-#### テーブルの削除
-
-「5. テーブル削除」
-
-template ノード「5. テーブルの内容の表示」に接続している injectノードのボタンをクリックします。
-
-env_table が削除されます。
+4. テーブルの削除 : template ノード「5. テーブルの内容の表示」に接続している injectノードのボタンをクリックします。env_table が削除されます。
