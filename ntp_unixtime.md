@@ -106,9 +106,9 @@ const char *password = "<your WiFi password>";
 const char *ntpServer = "ntp.nict.jp";
 
 void setup() {
-  M5.begin(true, false, true, false);
-  M5.Speaker.mute();
-  M5.Lcd.fillScreen(TFT_BLACK);
+  M5.begin();
+  M5.Power.begin()
+  M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setTextSize(3);
   // Wifi connection
   connectWiFi();
@@ -200,6 +200,7 @@ time(&now); // (3) UNIX timeの取得
 
 ## スケッチ例 2. 現在の日時をLCDに表示する
 
+日本標準時での時刻を取得し、年月日、時間(時、分、秒)をLCDに表示するプログラムを示します。
 
 ````C
 #include <M5Stack.h>
@@ -216,9 +217,9 @@ const char *password = "<your wifi password>";
 const char *ntpServer = "ntp.nict.jp";
 
 void setup() {
-  M5.begin(true, false, true, false);
-  M5.Speaker.mute();
-  M5.Lcd.fillScreen(TFT_BLACK);
+  M5.begin();
+  M5.Power.begin();
+  M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setTextSize(3);
   // Wifi connection
   connectWiFi();
