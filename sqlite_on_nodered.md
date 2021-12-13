@@ -114,7 +114,7 @@ create table env_table(
 このノードに接続されている http in ノード「6.[get]/env」より渡される payload から timestamp フィールドとtemperature フィールドのデータを取り出してクエリへ挿入しています。このとき、Mustache 構文 `{{{payload.timestamp}}}`、`{{{payload.temperature}}}` を使っています。
 
 [テンプレート]
-````SQL
+````
 insert into env_table (timestamp, temperature)
   values (
     {{{payload.timestamp}}},
