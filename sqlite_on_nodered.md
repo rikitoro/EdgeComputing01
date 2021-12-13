@@ -95,6 +95,7 @@ SQLクエリ欄は「msg.topic経由」を選択します。
 | temperature | real | 気温 |
 
 [テンプレート]
+
 ````SQL
 create table env_table(
   timestamp int,
@@ -114,6 +115,7 @@ create table env_table(
 このノードに接続されている http in ノード「6.[get]/env」より渡される payload から timestamp フィールドとtemperature フィールドのデータを取り出してクエリへ挿入しています。このとき、Mustache 構文 `\{\{\{payload.timestamp\}\}\}`、`{{{payload.temperature}}}` を使っています。
 
 [テンプレート]
+
 ````
 insert into env_table (timestamp, temperature)
   values (
@@ -134,6 +136,7 @@ insert into env_table (timestamp, temperature)
 select 文により env_table に保持されているすべてのデータを取得する SQL クエリを記述しています。
 
 [テンプレート]
+
 ````SQL
 select * from env_table;
 ````
