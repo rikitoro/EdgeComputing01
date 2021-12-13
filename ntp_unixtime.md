@@ -85,7 +85,7 @@ int tm_sec;  // 秒 [0-59]
 
 プログラム中の `<your WiFi SSID>` と `<your WiFi password>` はそれぞれ実習で用いる Wi-Fi アクセスポイントの SSDI とパスワードに置き換えてください。
 
-<img src="./fig/unixtime.jpg" alt="UNIX time の表示">
+<img src="./fig/unixtime.png" alt="UNIX time の表示">
 
 ---
 
@@ -253,7 +253,7 @@ String getDateTime() {
   int day     = timeinfo.tm_mday;
   int hour    = timeinfo.tm_hour;
   int minute  = timeinfo.tm_min;
-  int second  = timeinfo.tm_second;
+  int second  = timeinfo.tm_sec;
   char buf[60];
   sprintf(buf, "%4d-%02d-%02d %02d:%02d:%02d", 
                 year, month, day, hour, minute, second);
