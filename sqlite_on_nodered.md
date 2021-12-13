@@ -111,7 +111,7 @@ create table env_table(
 <img src="./fig/insert_data.png" alt="insert 文によるデータ挿入">
 
 テンプレート欄には insert 文により、env_table へデータを挿入するSQLクエリを記述しています。
-このノードに接続されている http in ノード「6.[get]/env」より渡される payload から timestamp フィールドとtemperature フィールドのデータを取り出してクエリへ挿入しています。このとき、Mustache 構文 `{{{payload.timestamp}}}`、`{{{payload.temperature}}}` を使っています。
+このノードに接続されている http in ノード「6.[get]/env」より渡される payload から timestamp フィールドとtemperature フィールドのデータを取り出してクエリへ挿入しています。このとき、Mustache 構文 `\{\{\{payload.timestamp\}\}\}`、`{{{payload.temperature}}}` を使っています。
 
 [テンプレート]
 ````
